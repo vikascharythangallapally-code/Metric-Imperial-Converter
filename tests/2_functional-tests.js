@@ -24,30 +24,45 @@ suite('Functional Tests', function() {
   });
 
   test('Convert an invalid input such as 32g', function(done) {
-    chai.request(server)
-      .get('/api/convert?input=32g')
-      .end(function(err, res) {
-        assert.isNull(err);
-        assert.strictEqual(res.status, 200);
-        assert.deepEqual(res.body, { error: 'invalid unit' });
-        done();
-      });
+    const invalidUnits = ['32g', '10kilomegagram', '1xyz'];
+    let completed = 0;
+
+    invalidUnits.forEach(input => {
+      chai.request(server)
+        .get('/api/convert')
+        .query({ input })
+        .end(function(err, res) {
+          assert.isNull(err);
+          assert.strictEqual(res.status, 200);
+          assert.deepEqual(res.body, { error: 'invalid unit' });
+          completed += 1;
+          if (completed === invalidUnits.length) done();
+        });
+    });
   });
 
   test('Convert an invalid number such as 3/7.2/4kg', function(done) {
-    chai.request(server)
-      .get('/api/convert?input=3/7.2/4kg')
-      .end(function(err, res) {
-        assert.isNull(err);
-        assert.strictEqual(res.status, 200);
-        assert.deepEqual(res.body, { error: 'invalid number' });
-        done();
-      });
+    const invalidNumbers = ['3/2/3kg', '3/7.2/4kg'];
+    let completed = 0;
+
+    invalidNumbers.forEach(input => {
+      chai.request(server)
+        .get('/api/convert')
+        .query({ input })
+        .end(function(err, res) {
+          assert.isNull(err);
+          assert.strictEqual(res.status, 200);
+          assert.deepEqual(res.body, { error: 'invalid number' });
+          completed += 1;
+          if (completed === invalidNumbers.length) done();
+        });
+    });
   });
 
   test('Convert an invalid number AND unit', function(done) {
     chai.request(server)
-      .get('/api/convert?input=3/7.2/4kilomegagram')
+      .get('/api/convert')
+      .query({ input: '3/7.2/4kilomegagram' })
       .end(function(err, res) {
         assert.isNull(err);
         assert.strictEqual(res.status, 200);

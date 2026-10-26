@@ -30,13 +30,24 @@ suite('Unit Tests', function() {
   });
 
   test('ConvertHandler should correctly read each valid input unit', function() {
-    ['gal', 'L', 'mi', 'km', 'lbs', 'kg'].forEach(unit => {
-      assert.strictEqual(convertHandler.getUnit(`10${unit}`), unit);
+    const validUnits = [
+      ['10GAL', 'gal'], ['10gal', 'gal'], ['10GaL', 'gal'],
+      ['10L', 'L'], ['10l', 'L'],
+      ['10MI', 'mi'], ['10mi', 'mi'],
+      ['10KM', 'km'], ['10km', 'km'],
+      ['10LBS', 'lbs'], ['10lbs', 'lbs'],
+      ['10KG', 'kg'], ['10kg', 'kg']
+    ];
+
+    validUnits.forEach(([input, unit]) => {
+      assert.strictEqual(convertHandler.getUnit(input), unit);
     });
   });
 
   test('ConvertHandler should correctly return an error for an invalid input unit', function() {
-    assert.strictEqual(convertHandler.getUnit('10g'), 'invalid unit');
+    ['10g', '10kilomegagram', '1xyz'].forEach(input => {
+      assert.strictEqual(convertHandler.getUnit(input), 'invalid unit');
+    });
   });
 
   test('ConvertHandler should return the correct return unit for each valid input unit', function() {
