@@ -18,11 +18,12 @@ suite('Unit Tests', function() {
   });
 
   test('ConvertHandler should correctly read a fractional input with a decimal', function() {
-    assert.strictEqual(convertHandler.getNum('2.5/2mi'), 1.25);
+    assert.strictEqual(convertHandler.getNum('2.5/6mi'), 0.41667);
   });
 
   test('ConvertHandler should correctly return an error on a double-fraction', function() {
     assert.strictEqual(convertHandler.getNum('3/2/3kg'), 'invalid number');
+    assert.strictEqual(convertHandler.getNum('3/7.2/4kg'), 'invalid number');
   });
 
   test('ConvertHandler should correctly default to a numerical input of 1', function() {

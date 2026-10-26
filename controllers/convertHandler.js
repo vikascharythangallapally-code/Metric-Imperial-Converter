@@ -14,13 +14,15 @@ function ConvertHandler() {
 
     if (numberPart === '') return 1;
 
-    const parts = numberPart.split('/');
-    if (parts.length > 2 || parts.some(part => !/^\d+(?:\.\d*)?$/.test(part))) {
+    const numericPattern = /^\d+(?:\.\d*)?(?:\/\d+(?:\.\d*)?)?$/;
+    if (!numericPattern.test(numberPart)) {
       return 'invalid number';
     }
 
+    const parts = numberPart.split('/');
     const numerator = Number(parts[0]);
     const denominator = parts.length === 2 ? Number(parts[1]) : 1;
+
     if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator === 0) {
       return 'invalid number';
     }
